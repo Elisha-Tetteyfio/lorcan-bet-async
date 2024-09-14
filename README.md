@@ -14,6 +14,7 @@ def deps do
   ]
 end
 ```
+Run mix ecto.create and mix ecto.migrate to create and migrate your db
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can

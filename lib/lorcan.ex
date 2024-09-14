@@ -2,17 +2,16 @@ defmodule Lorcan do
   @moduledoc """
   Documentation for `Lorcan`.
   """
+  use Plug.Router
 
-  @doc """
-  Hello world.
+  plug :match
+  plug :dispatch
 
-  ## Examples
-
-      iex> Lorcan.hello()
-      :world
-
-  """
   def hello do
     :world
+  end
+
+  get "/" do
+    send_resp(conn, 200, "Welcome to My API!")
   end
 end
