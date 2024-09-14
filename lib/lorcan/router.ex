@@ -67,6 +67,21 @@ defmodule Lorcan.Router do
     end
   end
 
+  delete "product/:id" do
+    product_id = conn.params["id"]
+    case Validation.validate_id(product_id) do
+      {:ok, _} ->
+        case ProductController.delete_product(product_id) do
+          {:ok, message} ->
+            send_response(conn, 200, message)
+          {:error, reason} ->
+            send_response(conn, 400, reason)
+        end
+      {:error, reason} ->
+        send_response(conn, 400, reason)
+    end
+  end
+
   def send_response(conn, request_status, response) do
     conn
     |> put_resp_header("content-type", "application/json")

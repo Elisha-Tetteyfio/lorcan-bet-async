@@ -77,4 +77,19 @@ defmodule Lorcan.Controller.ProductController do
         end
     end
   end
+
+  def delete_product(product_id) do
+    case Repo.get(Product, product_id) do
+      nil ->
+        {:error, Constants.no_record_found}
+
+      product ->
+        case Repo.delete(product) do
+          {:ok, _} ->
+            {:ok, Constants.success_deleted}
+          {:error, changeset} ->
+            {:error, changeset}
+        end
+    end
+  end
 end
