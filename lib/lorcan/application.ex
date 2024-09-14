@@ -11,7 +11,7 @@ defmodule Lorcan.Application do
       # Starts a worker by calling: Lorcan.Worker.start_link(arg)
       # {Lorcan.Worker, arg}
       Lorcan.Repo,
-      {Plug.Cowboy, scheme: :http, plug: Lorcan, options: [port: 4002]},
+      {Plug.Cowboy, scheme: :http, plug: Lorcan.Router, options: [port: 4002]},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
