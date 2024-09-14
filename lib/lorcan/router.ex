@@ -40,6 +40,15 @@ defmodule Lorcan.Router do
       end
   end
 
+  get "/products" do
+    case ProductController.get_products do
+      {:ok, response} ->
+        send_response(conn, 200, response)
+      {:error, reason} ->
+        send_response(conn, 404, reason)
+    end
+  end
+
   def send_response(conn, request_status, response) do
     conn
     |> put_resp_header("content-type", "application/json")

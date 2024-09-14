@@ -21,7 +21,11 @@ defmodule Lorcan.Constants do
   const :err_invalid_quantity, %{ resp_code: "456", resp_msg: "Invalid quantity value" }
 
   # Success messages
-  const :success_created, %{ resp_code: "00", resp_msg: "Contact successfully created" }
-  const :success_updated, %{ resp_code: "00", resp_msg: "Contact successfully updated" }
-  const :success_deleted, %{ resp_code: "00", resp_msg: "Contact successfully deleted" }
+  const :success_created, %{ resp_code: "00", resp_msg: "Product successfully created" }
+  const :success_updated, %{ resp_code: "00", resp_msg: "Product successfully updated" }
+  const :success_deleted, %{ resp_code: "00", resp_msg: "Product successfully deleted" }
+  const :success, %{ resp_code: "00", resp_msg: "Success" }
+
+  # Other messages
+  const :no_record_found, %{resp_code: "404", resp_msg: "No records found"}
 end

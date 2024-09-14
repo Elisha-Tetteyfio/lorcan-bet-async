@@ -1,4 +1,5 @@
 defmodule Lorcan.Controller.ProductController do
+  import Ecto.Query
   alias Lorcan.Constants
   alias Lorcan.Schema.Inventory
   alias Lorcan.Schema.Product
@@ -32,5 +33,20 @@ defmodule Lorcan.Controller.ProductController do
     description = product.description
 
     Map.put(Constants.success_created, :details, %{name: name, price: price, quantity: quantity, description: description})
+  end
+
+
+  def get_products do
+    case Repo.all(
+      from(p in Product,
+						left_join: i in Inventory, on: i.product_id == p.id,
+						select: %{id: p.id, name: p.name, price: p.price, quantity: i.quantity}
+					)
+    ) do
+      [] ->
+        {:error, Constants.no_record_found}
+      products ->
+        {:ok, Map.put(Constants.success, :details, products)}
+    end
   end
 end
