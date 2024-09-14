@@ -1,4 +1,5 @@
 defmodule Lorcan.Controller.ProductController do
+  alias Lorcan.Constants
   alias Lorcan.Schema.Inventory
   alias Lorcan.Schema.Product
   alias Lorcan.Repo
@@ -13,7 +14,7 @@ defmodule Lorcan.Controller.ProductController do
 
           case Repo.insert(inventory_changeset) do
             {:ok, inventory} ->
-              %{product: product, inventory: inventory}
+              new_product_details(product, inventory)
             {:error, changeset} ->
               Repo.rollback(changeset)
           end
@@ -22,5 +23,14 @@ defmodule Lorcan.Controller.ProductController do
           Repo.rollback(changeset)
       end
     end)
+  end
+
+  defp new_product_details(product, inventory) do
+    name = product.name
+    price = product.price
+    quantity = inventory.quantity
+    description = product.description
+
+    Map.put(Constants.success_created, :details, %{name: name, price: price, quantity: quantity, description: description})
   end
 end

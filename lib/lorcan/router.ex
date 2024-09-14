@@ -1,6 +1,6 @@
 defmodule Lorcan.Router do
+  alias Lorcan.Validation
   alias Lorcan.Controller.ProductController
-  # alias Lorcan.Schema.Product
   use Plug.Router
 
   plug :match
@@ -15,21 +15,29 @@ defmodule Lorcan.Router do
     {:ok, body, conn} = read_body(conn)
     {:ok, parsed} = Poison.decode(body)
 
-    product = %{
-      name: parsed["name"],
-      price: parsed["price"],
-      description: parsed["description"]
-    }
-    inventory = %{
-      quantity: parsed["quantity"]
-    }
+    with {:ok, _name} <- Validation.validate_name(parsed["name"]),
+      {:ok, _price} <- Validation.validate_price(parsed["price"]),
+      {:ok, _quantity} <- Validation.validate_quantity(parsed["quantity"])
+      do
+        product = %{
+          name: parsed["name"],
+          price: parsed["price"],
+          description: parsed["description"]
+        }
+        inventory = %{
+          quantity: parsed["quantity"]
+        }
 
-    case ProductController.create_product(product, inventory) do
-      {:ok, message} ->
-        send_response(conn, 200, message)
+        case ProductController.create_product(product, inventory) do
+          {:ok, message} ->
+            send_response(conn, 200, message)
+          {:error, reason} ->
+            send_response(conn, 400, reason)
+        end
+    else
       {:error, reason} ->
         send_response(conn, 400, reason)
-    end
+      end
   end
 
   def send_response(conn, request_status, response) do
