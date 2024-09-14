@@ -30,4 +30,14 @@ alias Lorcan.Constants
       {:error, Constants.err_invalid_quantity}
     end
   end
+
+  def validate_id(val) when val in ["", nil], do: {:error, Constants.err_missing_id}
+  def validate_id(val) do
+    case Integer.parse(val) do
+      {val, ""} ->
+        {:ok, val}
+      _error ->
+        {:error, Constants.err_invalid_id}
+    end
+  end
 end

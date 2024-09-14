@@ -15,7 +15,7 @@ defmodule Lorcan.Controller.ProductController do
 
           case Repo.insert(inventory_changeset) do
             {:ok, inventory} ->
-              new_product_details(product, inventory)
+              product_details(product, inventory)
             {:error, changeset} ->
               Repo.rollback(changeset)
           end
@@ -26,13 +26,21 @@ defmodule Lorcan.Controller.ProductController do
     end)
   end
 
-  defp new_product_details(product, inventory) do
+  defp product_details(product, inventory) do
     name = product.name
     price = product.price
     quantity = inventory.quantity
     description = product.description
 
     Map.put(Constants.success_created, :details, %{name: name, price: price, quantity: quantity, description: description})
+  end
+
+  defp product_details(product) do
+    name = product.name
+    price = product.price
+    description = product.description
+
+    Map.put(Constants.success_updated, :details, %{name: name, price: price, description: description})
   end
 
 
@@ -47,6 +55,26 @@ defmodule Lorcan.Controller.ProductController do
         {:error, Constants.no_record_found}
       products ->
         {:ok, Map.put(Constants.success, :details, products)}
+    end
+  end
+
+  def update_product(product_id, details) do
+    case Repo.get(Product, product_id) do
+      nil ->
+        {:error, Constants.no_record_found}
+
+      product ->
+        # inventory = Repo.preload(product, :inventory)
+
+        changeset = Product.changeset(product, details)
+
+        case Repo.update(changeset) do
+          {:ok, updated_product} ->
+            {:ok, product_details(updated_product)}
+
+          {:error, changeset} ->
+            {:error, changeset}
+        end
     end
   end
 end

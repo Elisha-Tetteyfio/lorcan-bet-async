@@ -49,6 +49,24 @@ defmodule Lorcan.Router do
     end
   end
 
+  put "/product/:id" do
+    product_id = conn.params["id"]
+    case Validation.validate_id(product_id) do
+      {:ok, _} ->
+        {:ok, body, conn} = read_body(conn)
+        {:ok, details} = Poison.decode(body)
+
+        case ProductController.update_product(product_id, details) do
+          {:ok, message} ->
+            send_response(conn, 200, message)
+          {:error, reason} ->
+            send_response(conn, 404, reason)
+        end
+      {:error, reason} ->
+        send_response(conn, 400, reason)
+    end
+  end
+
   def send_response(conn, request_status, response) do
     conn
     |> put_resp_header("content-type", "application/json")

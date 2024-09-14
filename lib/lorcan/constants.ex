@@ -19,6 +19,8 @@ defmodule Lorcan.Constants do
   const :err_invalid_price, %{ resp_code: "453", resp_msg: "Invalid price value" }
   const :err_missing_quantity, %{ resp_code: "454", resp_msg: "Missing quantity in params" }
   const :err_invalid_quantity, %{ resp_code: "456", resp_msg: "Invalid quantity value" }
+  const :err_missing_id, %{ resp_code: "457", resp_msg: "Missing id in params" }
+  const :err_invalid_id, %{ resp_code: "458", resp_msg: "Invalid id value" }
 
   # Success messages
   const :success_created, %{ resp_code: "00", resp_msg: "Product successfully created" }
