@@ -34,7 +34,6 @@ defmodule Lorcan.Controller.ProductController do
 
     Map.put(Constants.success_created, :details, %{name: name, price: price, quantity: quantity, description: description})
   end
-
   defp product_details(product) do
     name = product.name
     price = product.price
@@ -42,7 +41,6 @@ defmodule Lorcan.Controller.ProductController do
 
     Map.put(Constants.success_updated, :details, %{name: name, price: price, description: description})
   end
-
 
   def get_products do
     case Repo.all(

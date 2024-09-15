@@ -28,7 +28,8 @@ defmodule Lorcan.MixProject do
       {:ecto, "~> 3.11"},
       {:ecto_sql, "~> 3.11"},
       {:postgrex, "~> 0.18.0"},
-      {:dotenv_parser, "~> 2.0"}
+      {:dotenv_parser, "~> 2.0"},
+      {:gen_stage, "~> 1.0.0"}
     ]
   end
 end

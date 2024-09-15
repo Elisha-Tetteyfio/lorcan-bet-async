@@ -31,6 +31,16 @@ alias Lorcan.Constants
     end
   end
 
+  def validate_post_id(id) when id in ["", nil], do: {:error, Constants.err_missing_id}
+  def validate_post_id(id) do
+    case id do
+      id when is_integer(id) ->
+      {:ok, id}
+    _ ->
+      {:error, Constants.err_invalid_id}
+    end
+  end
+
   def validate_id(val) when val in ["", nil], do: {:error, Constants.err_missing_id}
   def validate_id(val) do
     case Integer.parse(val) do

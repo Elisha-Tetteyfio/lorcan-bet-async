@@ -1,4 +1,5 @@
 defmodule Lorcan.Router do
+  alias Lorcan.Controller.OrderController
   alias Lorcan.Validation
   alias Lorcan.Controller.ProductController
   use Plug.Router
@@ -80,6 +81,30 @@ defmodule Lorcan.Router do
       {:error, reason} ->
         send_response(conn, 400, reason)
     end
+  end
+
+  post "/orders" do
+    {:ok, body, conn} = read_body(conn)
+    {:ok, parsed} = Poison.decode(body)
+
+    with {:ok, _product_id} <- Validation.validate_post_id(parsed["product_id"]),
+      {:ok, _quantity} <- Validation.validate_quantity(parsed["quantity"])
+      do
+        product = %{
+          product_id: parsed["product_id"],
+          quantity: parsed["quantity"]
+        }
+
+        case OrderController.create_order(product) do
+          {:ok, message} ->
+            send_response(conn, 200, message)
+          {:error, reason} ->
+            send_response(conn, 400, reason)
+        end
+    else
+      {:error, reason} ->
+        send_response(conn, 400, reason)
+      end
   end
 
   def send_response(conn, request_status, response) do
