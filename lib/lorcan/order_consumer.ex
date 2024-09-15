@@ -31,12 +31,13 @@ defmodule Lorcan.OrderConsumer do
             Repo.insert!(%OrderLog{order_id: order.id, status: "processed"})
           :error ->
             Repo.update!(Ecto.Changeset.change(order, status: "failed"))
-            Repo.insert!(%OrderLog{order_id: order.id, status: "failed"})
+            Repo.insert!(%OrderLog{order_id: order.id, status: "failed", error_message: "External payment failed"})
         end
       else
         Repo.update!(Ecto.Changeset.change(order, status: "failed"))
+        Repo.insert!(%OrderLog{order_id: order.id, status: "failed", error_message: "Order quantity more than inventory"})
       end
-    end) 
+    end)
   end
 
   defp call_payment_service(_order) do
